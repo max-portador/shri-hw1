@@ -1,0 +1,23 @@
+{
+  "name": "shri_hw_node_1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index"
+  },
+  "author": "max-portador",
+  "license": "ISC",
+  "dependencies": {
+    "backrem": "^1.0.4",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "image-size": "^1.0.0",
+    "nanoid": "^3.1.28",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}

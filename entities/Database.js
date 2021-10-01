@@ -3,14 +3,12 @@ const { existsSync } = require('fs')
 const { dbDumpFile } = require('../config')
 const { writeFile } = require('../utils/fs')
 const { prettifyJsonToString} = require('../utils/prettifyJsonToString')
-const Svg = require('.Svg')
+const Img = require('./Img')
 
 class DataBase extends EventEmitter {
     constructor() {
         super();
-
-        this.likedIds = {}
-        this.idToSvg = {}
+        this.idToImg = {}
     }
 
     async initFromDump() {
@@ -18,65 +16,59 @@ class DataBase extends EventEmitter {
             return;
         }
 
-        const dump = require(dbDumpFile);
+        const dump = require(dbDumpFile)
 
-        if (typeof dump.idToSvg === 'object') {
-            this.idToSvg = {};
+        if (typeof dump.idToImg === 'object') {
+            this.idToImg = {};
             
-            for (let id in dump.idToSvg) {
-                const svg = dump.idToSvg[id]
+            for (let id in dump.idToImg) {
+                const img = dump.idToImg[id]
 
-                this.idToSvg[id] = new Svg(svg.id, svg.createdAt)
+                this.idToImg[id] = new Img(img.size, img.id, img.uploadedAt)
             }
         }
-
-        if (typeof dump.likedIds === 'object') {
-            this.likedIds = {...dump.likedIds}
-        }
     }
 
-    async insert(svg, originalContent) {
-        await svg.saveOriginal(originalContent)
+    async insert(img, originalContent) {
+        await img.saveOriginal(originalContent)
 
-        this.idToSvg[svg.id] = svg;
+        this.idToImg[img.id] = img;
 
         this.emit('changed')
+
     }
 
-    setLiked(svgId, value) {
-        if (value === false) {
-            delete this.likedIds[svgId]
-        } else {
-            this.likedIds[svgId] = true;
+    async remove(imgId) {
+        const imgRaw = this.idToImg[imgId]
+
+        const img = new Img(imgRaw.size, imgRaw.id, imgRaw.uploadedAt)
+
+        return img;
+    }
+
+    findOne(ImgId) {
+        const imgRaw = this.idToImg[ImgId];
+
+        if (!imgRaw) {
+            return null;
         }
 
-        this.emit('changed')
+        const img = new Img(imgRaw.size, imgRaw.id, imgRaw.uploadedAt);
+
+        return img;
     }
 
-    async remove(svgId) {
-        const svgRaw = this.idToSvg[svgId]
+    find() {
+        let allImgs = Object.values(this.idToImg)
 
-        const svg = new Svg(svgRaw.id, svgRaw.createdAt)
+        allImgs.sort((imgA, imgB) => imgB.uploadedAt - imgA.uploadedAt)
 
-        return svg;
-    }
-
-    find(isLiked = false) {
-        let allSvgs = Object.values(this.idToSvg)
-
-        if (isLiked === true) {
-            allSvgs = allSvgs.filter((svg) => this.likedIds[svg.id])
-        }
-
-        allSvgs.sort((svgA, svgB) => svgB.createdAt - svgA.createdAt)
-
-        return allSvgs
+        return allImgs
     }
 
     toJSON() {
         return {
-          idToSvg: this.idToSvg,
-          likedIds: this.likedIds,
+        idToImg: this.idToImg,
         }
       }
 

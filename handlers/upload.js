@@ -11,7 +11,7 @@ const uploadImage = async function(req, res) {
   try {
     const img = new Img(file.size)
     await db.insert(img, file.buffer)
-    res.send({
+    res.json({
         id: img.id
       })
   } catch (err) {

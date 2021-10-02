@@ -14,7 +14,7 @@ const getImage = (req, res) => {
       readStream.pipe(res)
 
   } else {
-      res.status(404).send("В базе нет изображения с таким ID")
+      res.status(404).send(`В базе нет изображения с ID: ${req.params.id}`)
   }
 }
 

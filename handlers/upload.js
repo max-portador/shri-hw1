@@ -6,20 +6,15 @@ const upload = multer()
 
 const uploadImage = async function(req, res) {
 
-  const file = req.file
+    const file = req.file
 
-  try {
     const img = new Img(file.size)
     await db.insert(img, file.buffer)
-    res.json({
-        id: img.id
-      })
-  } catch (err) {
-    res.status(404).send(err)
-  }
+    res.json({ id: img.id })
+
 }
 
 module.exports = {
-  upload,
-  uploadImage
+    upload,
+    uploadImage
 }

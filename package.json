@@ -11,7 +11,7 @@
   "author": "max-portador",
   "license": "ISC",
   "dependencies": {
-    "backrem": "^1.0.4",
+    "backrem": "^1.1.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "multer": "^1.4.3",

@@ -25,21 +25,15 @@ function checkKeys(obj) {
 
 
 const mergeImages = async (req, res) => {
-    const front = fs.createReadStream(absPath(db.findOne(req.query.front).originalFilename))
-    const back =  fs.createReadStream(absPath(db.findOne(req.query.back).originalFilename))
+    const front = await prepareID(req.query.front)
+    const back = await prepareID(req.query.back)
 
     const color = req.query.color.split(",").map(d => +d)
     const threshold = +req.query.threshold
 
     res.contentType('jpg')
-    replaceBackground(front, back, color, threshold)
-      .then( (result) => {
-        result.pipe(res)
-      })
-
-
-
+    const result = await replaceBackground(front, back, color, threshold)
+    result.pipe(res)
 }
-
 
 module.exports = mergeImages

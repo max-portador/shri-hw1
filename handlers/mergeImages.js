@@ -34,8 +34,9 @@ const mergeImages = async (req, res) => {
           const threshold = +req.query.threshold
 
         try {
-           const result = await replaceBackground(front, back, color, threshold)
-          result.pipe(res)
+            res.contentType('jpg')
+            const result = await replaceBackground(front, back, color, threshold)
+            result.pipe(res)
 
         } catch (err) {
           res.status(404).send()

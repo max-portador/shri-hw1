@@ -7,6 +7,7 @@ const getImage = (req, res) => {
   const img = db.findOne(req.params.id)
 
   if (img) {
+      res.contentType('jpg')
       const imgPath = absPath(img.originalFilename)
       const readStream = fs.createReadStream(imgPath)
 

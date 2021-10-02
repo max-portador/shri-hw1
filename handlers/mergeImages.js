@@ -25,25 +25,16 @@ function checkKeys(obj) {
 
 
 const mergeImages = async (req, res) => {
-  if (checkKeys(req.query)){
-      const front = await prepareID(req.query.front)
-      const back = await prepareID(req.query.back)
+    const front = await prepareID(req.query.front)
+    const back = await prepareID(req.query.back)
 
-      if (front && back) {
-          const color = req.query.color.split(",").map(d => +d)
-          const threshold = +req.query.threshold
+    const color = req.query.color.split(",").map(d => +d)
+    const threshold = +req.query.threshold
 
-        try {
-            res.contentType('jpg')
-            const result = await replaceBackground(front, back, color, threshold)
-            result.pipe(res)
+    res.contentType('jpg')
+    const result = await replaceBackground(front, back, color, threshold)
+    result.pipe(res)
+}
 
-        } catch (err) {
-          res.status(404).send()
-        }}}
-
-    else {
-      res.status(404).end()
-    }}
 
 module.exports = mergeImages

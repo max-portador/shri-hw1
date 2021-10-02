@@ -39,11 +39,24 @@ class DataBase extends EventEmitter {
     }
 
     async remove(imgId) {
-        const imgRaw = this.idToImg[imgId]
+        if (imgId in this.idToImg) {
 
-        const img = new Img(imgRaw.size, imgRaw.id, imgRaw.uploadedAt)
+            const imgRaw = this.idToImg[imgId]
 
-        return img;
+            const img = new Img(imgRaw.size, imgRaw.id, imgRaw.uploadedAt)
+            await img.removeOriginal();
+
+            delete this.idToImg[imgId];
+            this.emit('changed');
+
+            return img;
+
+        } else {
+
+            return null
+        }
+
+
     }
 
     findOne(ImgId) {

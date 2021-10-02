@@ -1,6 +1,5 @@
 const express = require('express')
 const path = require('path')
-
 const router = require('./routes/router')
 const { imagesFolder, PORT } = require('./config')
 
@@ -16,7 +15,7 @@ app.use(router)
 
 
 
-async function start() {
+function start() {
     app.listen(PORT, () => {
         console.log('Server has been started at port ' + PORT);
     })

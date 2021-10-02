@@ -3,6 +3,7 @@ const db = require('../entities/Database')
 const absPath = require("../utils/getFullPath");
 const {exists} = require("../utils/fs")
 const fs = require('fs')
+const path = require('path');
 
 async function prepareID (imgId) {
   const img = db.findOne(imgId)
@@ -34,7 +35,7 @@ const mergeImages = async (req, res) => {
 
         try {
            const result = await replaceBackground(front, back, color, threshold)
-           result.pipe(res)
+          result.pipe(res)
 
         } catch (err) {
           res.status(404).send()
